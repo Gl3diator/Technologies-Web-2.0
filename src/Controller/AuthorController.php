@@ -16,11 +16,11 @@ class AuthorController extends AbstractController
         ]);
     }
 
-    #[Route('/author', name: 'app_author_index')]
-    public function index(): Response
+    #[Route('/author', name: 'app_author_default')]
+    public function showDefault(): Response
     {
-        return $this->render('author/index.html.twig', [
-            'controller_name' => 'AuthorController',
+        return $this->render('author/show.html.twig', [
+            'name' => '', 
         ]);
     }
 }
