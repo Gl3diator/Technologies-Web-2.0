@@ -35,14 +35,8 @@
             </div>
 
         {% else %}
-            <!-- AFFICHAGE QUAND AUCUN AUTEUR N'EST SPÉCIFIÉ -->
-            <div class="card my-4">
-                <div class="card-body text-center py-5">
-                    <i class="material-symbols-rounded text-muted" style="font-size: 64px;">person</i>
-                    <h4 class="text-muted mt-3">Aucun auteur sélectionné</h4>
-                </div>
-            </div>
-        {% endif %}
+    <script>window.location.href = "{{ path('showAll') }}";</script>
+{% endif %}
     </div>
 </div>
 {% endblock %}

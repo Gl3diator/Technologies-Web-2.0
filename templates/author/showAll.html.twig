@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Show All Authors{% endblock %}
+
+{% block page_title %}Show All Authors{% endblock %}
+
+{% block body %}
+
+  <h1>Liste des Auteurs</h1>
+    
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in list %}
+            <tr>
+                <td>{{ i.username }}</td>
+                <td>{{ i.email }}</td>
+                <td>
+                    <a href="{{ path('app_author', {'name': i.username}) }}" class="btn btn-primary">
+                        Voir
+                    </a>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="3" class="text-center">Aucun auteur trouvé</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+
+{% endblock %}
