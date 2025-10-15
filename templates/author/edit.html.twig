@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Author{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1 class="mb-4">Edit Author: {{ author.username }}</h1>
+
+    {{ form_start(form, {'attr': {'class': 'form'}}) }}
+        {{ form_widget(form) }}
+        <button type="submit" class="btn btn-primary mt-3">Update Author</button>
+    {{ form_end(form) }}
+
+    <a href="{{ path('showAll') }}" class="btn btn-secondary mt-3">Back to List</a>
+</div>
+{% endblock %}

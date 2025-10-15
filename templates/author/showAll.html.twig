@@ -1,39 +1,44 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Show All Authors{% endblock %}
-
-{% block page_title %}Show All Authors{% endblock %}
+{% block title %}Liste des Auteurs{% endblock %}
 
 {% block body %}
+<div class="container mt-4">
+    <h1 class="mb-4">Liste des Auteurs</h1>
 
-  <h1>Liste des Auteurs</h1>
-    
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Username</th>
-                <th>Email</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for i in list %}
-            <tr>
-                <td>{{ i.username }}</td>
-                <td>{{ i.email }}</td>
-                <td>
-                    <a href="{{ path('app_author', {'name': i.username}) }}" class="btn btn-primary">
-                        Voir
-                    </a>
-                </td>
-            </tr>
-            {% else %}
-            <tr>
-                <td colspan="3" class="text-center">Aucun auteur trouvé</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="mb-3">
+        <a href="{{ path('app_author_new') }}" class="btn btn-success">Add New Author</a>
+    </div>
 
-
+    {% if list is not empty %}
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for author in list %}
+                        <tr>
+                            <td><strong>{{ author.username }}</strong></td>
+                            <td>{{ author.email }}</td>
+                            <td>
+                                <a href="{{ path('app_author_edit', {'id': author.id}) }}" class="btn btn-warning btn-sm">Edit</a>
+                                <a href="{{ path('app_author_delete', {'id': author.id}) }}" class="btn btn-danger btn-sm" 
+                                   onclick="return confirm('Are you sure you want to delete this author?')">Delete</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            No authors found.
+        </div>
+    {% endif %}
+</div>
 {% endblock %}
