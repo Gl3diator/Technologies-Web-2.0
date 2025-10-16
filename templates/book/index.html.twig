@@ -1,0 +1,121 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Books Management{% endblock %}
+{% block page_title %}Books{% endblock %}
+
+{% block body %}
+<div class="mb-2">
+    <a href="{{ path('showAll') }}" class="btn btn-outline-primary btn-sm">Go to Authors Management</a>
+</div>
+<div class="container mt-4">
+    <h1 class="mb-4">Book Management</h1>
+
+    <!-- Statistics -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card text-white bg-success">
+                <div class="card-body">
+                    <h5 class="card-title">Published Books</h5>
+                    <p class="card-text display-4">{{ published_books|length }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card text-white bg-warning">
+                <div class="card-body">
+                    <h5 class="card-title">Unpublished Books</h5>
+                    <p class="card-text display-4">{{ unpublished_books|length }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Book Button -->
+    <div class="mb-3">
+        <a href="{{ path('app_book_new') }}" class="btn btn-success">Add New Book</a>
+    </div>
+
+    <!-- Published Books List -->
+    <h3 class="mb-3">Published Books</h3>
+    {% if published_books is not empty %}
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Reference</th>
+                        <th>Title</th>
+                        <th>Category</th>
+                        <th>Author</th>
+                        <th>Publication Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for book in published_books %}
+                        <tr>
+                            <td>{{ book.ref }}</td>
+                            <td>{{ book.title }}</td>
+                            <td>{{ book.category }}</td>
+                            <td>{{ book.author.username }}</td>
+                            <td>{{ book.publicationDate|date('Y-m-d') }}</td>
+                            <td>
+                                <a href="{{ path('app_book_show', {'id': book.id}) }}" class="btn btn-info btn-sm">Show</a>
+                                <a href="{{ path('app_book_edit', {'id': book.id}) }}" class="btn btn-warning btn-sm">Edit</a>
+                                <a href="{{ path('app_book_delete', {'id': book.id}) }}" class="btn btn-danger btn-sm" 
+                                   onclick="return confirm('Are you sure you want to delete this book?')">Delete</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            No published books found.
+        </div>
+    {% endif %}
+
+    <!-- Unpublished Books List -->
+    <h3 class="mb-3 mt-5">Unpublished Books</h3>
+    {% if unpublished_books is not empty %}
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Reference</th>
+                        <th>Title</th>
+                        <th>Category</th>
+                        <th>Author</th>
+                        <th>Publication Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for book in unpublished_books %}
+                        <tr>
+                            <td>{{ book.ref }}</td>
+                            <td>{{ book.title }}</td>
+                            <td>{{ book.category }}</td>
+                            <td>{{ book.author.username }}</td>
+                            <td>{{ book.publicationDate|date('Y-m-d') }}</td>
+                            <td>
+                                <a href="{{ path('app_book_show', {'id': book.id}) }}" class="btn btn-info btn-sm">Show</a>
+                                <a href="{{ path('app_book_edit', {'id': book.id}) }}" class="btn btn-warning btn-sm">Edit</a>
+                                <a href="{{ path('app_book_delete', {'id': book.id}) }}" class="btn btn-danger btn-sm" 
+                                   onclick="return confirm('Are you sure you want to delete this book?')">Delete</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            No unpublished books found.
+        </div>
+    {% endif %}
+</div>
+<div class="mb-2">
+    <a href="{{ path('showAll') }}" class="btn btn-outline-primary btn-sm">Go to Authors Management</a>
+</div>
+{% endblock %}

@@ -13,7 +13,32 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AuthorController extends AbstractController
 {
-    // Put specific routes FIRST
+    // Put specific routes FIRST, before parameter routes
+    #[Route('/author/cleanup', name: 'app_author_cleanup')]
+    public function cleanup(EntityManagerInterface $entityManager, AuthorRepository $authorRepository): Response
+    {
+        // Find authors with zero books
+        $authorsWithZeroBooks = $authorRepository->findBy(['nb_books' => 0]);
+        
+        $deletedCount = 0;
+        
+        // Delete each author with zero books
+        foreach ($authorsWithZeroBooks as $author) {
+            $entityManager->remove($author);
+            $deletedCount++;
+        }
+        
+        $entityManager->flush();
+
+        if ($deletedCount > 0) {
+            $this->addFlash('success', "Cleaned up $deletedCount authors with zero books.");
+        } else {
+            $this->addFlash('info', 'No authors with zero books found.');
+        }
+
+        return $this->redirectToRoute('showAll');
+    }
+
     #[Route('/author/new', name: 'app_author_new')]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -66,32 +91,32 @@ class AuthorController extends AbstractController
         return $this-> render(view:'author/showAll.html.twig' , parameters:['list'=>$author]);
     }
 
-
     #[Route('/author/{id}/edit', name: 'app_author_edit')]
-public function edit(Request $request, Author $author, EntityManagerInterface $entityManager): Response
-{
-    $form = $this->createForm(AuthorType::class, $author);
-    $form->handleRequest($request);
+    public function edit(Request $request, Author $author, EntityManagerInterface $entityManager): Response
+    {
+        $form = $this->createForm(AuthorType::class, $author);
+        $form->handleRequest($request);
 
-    if ($form->isSubmitted() && $form->isValid()) {
-        $entityManager->flush();
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
 
-        $this->addFlash('success', 'Author updated successfully!');
-        return $this->redirectToRoute('showAll');
+            $this->addFlash('success', 'Author updated successfully!');
+            return $this->redirectToRoute('showAll');
+        }
+
+        return $this->render('author/edit.html.twig', [
+            'form' => $form->createView(),
+            'author' => $author,
+        ]);
     }
 
-    return $this->render('author/edit.html.twig', [
-        'form' => $form->createView(),
-        'author' => $author,
-    ]);
-}
-#[Route('/author/{id}/delete', name: 'app_author_delete')]
-public function delete(Author $author, EntityManagerInterface $entityManager): Response
-{
-    $entityManager->remove($author);
-    $entityManager->flush();
+    #[Route('/author/{id}/delete', name: 'app_author_delete')]
+    public function delete(Author $author, EntityManagerInterface $entityManager): Response
+    {
+        $entityManager->remove($author);
+        $entityManager->flush();
 
-    $this->addFlash('success', 'Author deleted successfully!');
-    return $this->redirectToRoute('showAll');
-}
+        $this->addFlash('success', 'Author deleted successfully!');
+        return $this->redirectToRoute('showAll');
+    }
 }
